@@ -7,11 +7,11 @@
 
 # Function to display usage information
 display_usage() {
-    echo "Usage: $0 [-m <month>] [-y <year>] -p <pi_sunset> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]"
+    echo "Usage: $0 [-m <month>] [-y <year>] -p <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]"
     echo "Options:"
     echo "  -m <month>: Specify the month (default: current month)"
     echo "  -y <year>: Specify the year (default: current year)"
-    echo "  -a <pi_sunset>: Specify the PI's sunset ID (required)"
+    echo "  -a <pi_sunet>: Specify the PI's SUNet ID (required)"
     echo "  -l <monthly_limit>: Specify the monthly cost limit (default: 800)"
     echo "  -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)"
     echo "  -c <cc_email>: Specify email addresses to cc the alerts (optional)"
@@ -28,7 +28,7 @@ while getopts ":m:y:a:l:e:c:h" opt; do
             year=$OPTARG
             ;;
         a)
-            pi_sunset=$OPTARG
+            pi_sunet=$OPTARG
             ;;
         l)
             monthly_limit=$OPTARG
@@ -56,9 +56,9 @@ while getopts ":m:y:a:l:e:c:h" opt; do
     esac
 done
 
-# Check if pi_sunset argument is provided
-if [ -z "$pi_sunset" ]; then
-    echo "Option -a <pi_sunset> is required."
+# Check if pi_sunet argument is provided
+if [ -z "$pi_sunet" ]; then
+    echo "Option -a <pi_sunet> is required."
     display_usage
     exit 1
 fi
@@ -121,8 +121,8 @@ Thank you!
 
 # Get all users in the group and compute the cost of the current month
 echo -e "user_name\tcpu_hours\tcharges_in_usd\tmonth\tyear"
-for user in $(getent group "scg_lab_$pi_sunset" | awk -F: '{print $4}' | tr ',' '\n'); do
-    get_compute_charges -a "$pi_sunset" -u "$user" -m "$month" -y "$year" -p | \
+for user in $(getent group "scg_lab_$pi_sunet" | awk -F: '{print $4}' | tr ',' '\n'); do
+    get_compute_charges -a "$pi_sunet" -u "$user" -m "$month" -y "$year" -p | \
     while read hours cost; do
         echo -e "$user\t$hours\t$cost\t$month\t$year"
 
