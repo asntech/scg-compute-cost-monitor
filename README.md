@@ -72,3 +72,5 @@ Save the crontab file and exit the edit or.
 
 Now, the cron job is scheduled to execute the script automatically at the specified time intervals. You can adjust the cron schedule according to your requirements by modifying the timing values (e.g., minute, hour) in the cron job line.
 
+**Note:** Make sure that only one person schedules the cron job in your group to avoid multiple alerts.
+
