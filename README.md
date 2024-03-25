@@ -1,8 +1,8 @@
-# SCG Compute Cost Watchdog
-> Track your group's monthly charges per user and ring the alarm if costs exceed the limit
+# SCG compute cost monitor
+> Track your group's monthly compute charges per user and ring the alarm if costs exceed the limit
 
 ## Description
-This is a Bash script created to calculate the monthly CPU cost for a specified lab group on the Stanford's [SCG](https://login.scg.stanford.edu/) HPC cluster. It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. The script includes logging functionality to prevent repeated email notifications for users who have already been notified within the same month.
+The bash script `scg_compute_cost_monitor` calculates the monthly CPU cost for a specified lab group on the Stanford's [SCG](https://login.scg.stanford.edu/) HPC cluster. It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. The script includes logging functionality to prevent repeated email notifications for users who have already been notified within the same month.
 
 ## Prerequisites
 Before using the script, ensure the following :
@@ -10,19 +10,19 @@ Before using the script, ensure the following :
 - And you can run `get_compute_charges` command-line tool
 
 ## Usage
-**Get the script**: Obtain the `scg_compute_cost_watchdog` script and ensure it is executable.
+**Get the script**: Obtain the `scg_compute_cost_monitor` script and ensure it is executable.
 
 ```bash
-git clone https://github.com/asntech/scg-compute-cost-watchdog.git
-cd scg-compute-cost-watchdog
-chmod +x scg_compute_cost_watchdog
+git clone https://github.com/asntech/scg-compute-cost-monitor.git
+cd scg-compute-cost-monitor
+chmod +x scg_compute_cost_monitor
 ```
 **Run the script**: Execute the script from the terminal with appropriate options to calculate the monthly CPU cost for your lab group. Try `-h` argument to see the options.
 
 ```
-./scg_compute_cost_watchdog -h
+./scg_compute_cost_monitor -h
 
-Usage: ./scg_compute_cost_watchdog [-m <month>] [-y <year>] -p <pi_sunset> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
+Usage: ./scg_compute_cost_monitor [-m <month>] [-y <year>] -p <pi_sunset> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
 
 Options:
   -m <month>: Specify the month (default: current month)
@@ -42,7 +42,7 @@ The script will display the CPU hours and charges for each user in the specified
 ## Example
 
 ```
-./scg_compute_cost_watchdog -a PI_SUNetID -m 03 -y 2024 -l 1000 -e true -c PI_SUNetID@stanford.edu
+./scg_compute_cost_monitor -a PI_SUNetID -m 03 -y 2024 -l 1000 -e true -c PI_SUNetID@stanford.edu
 ```
 
 This command will calculate the monthly CPU cost for lab group in March 2024. If the cost exceeds 1000 USD, email alerts will be sent to your `SUNet@stanford.edu` and cc'd to `PI_SUNetID@stanford.edu`. The script will prevent repeated email notifications for users who have already been notified within the same month. To get the current month, you don not need to set `-m` and `-y` arguments.
@@ -61,7 +61,7 @@ crontab -e
 Add a new line to the crontab file with the following format:
 
 ```bash
-0 0 * * * /path/to/scg_compute_cost_watchdog -a <pi_sunset> -l <monthly_limit> -e true -c <cc_email>
+0 0 * * * /path/to/scg_compute_cost_monitor -a <pi_sunset> -l <monthly_limit> -e true -c <cc_email>
 ```
 
 This line specifies that the script should run every day at midnight (00:00).

@@ -80,7 +80,7 @@ fi
 # Define log directory
 LOG_DIR="/home/${USER}"
 # Create log file name based on month and year
-log_file="$LOG_DIR/SCG_compute_cost_alerted_log_${year}_${month}.txt"
+log_file="$LOG_DIR/scg_compute_cost_monitor_log_${year}_${month}.txt"
 touch $log_file
 
 # Default values
