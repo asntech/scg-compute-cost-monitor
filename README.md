@@ -22,12 +22,12 @@ chmod +x scg_compute_cost_monitor
 ```
 ./scg_compute_cost_monitor -h
 
-Usage: ./scg_compute_cost_monitor [-m <month>] [-y <year>] -p <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
+Usage: ./scg_compute_cost_monitor [-m <month>] [-y <year>] -a <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
 
 Options:
   -m <month>: Specify the month (default: current month)
   -y <year>: Specify the year (default: current year)
-  -a <pi_sunet>: Specify the PI sunset ID (required)
+  -a <pi_sunet>: Specify the PI SUNet ID (required)
   -l <monthly_limit>: Specify the monthly cost limit (default: 800)
   -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)
   -c <cc_email>: Specify email addresses to cc the alerts (optional)
