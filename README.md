@@ -1,4 +1,5 @@
 # SCG Compute Cost Watchdog
+> Track your group's monthly charges per user and ring the alarm if costs exceed the limit
 
 ## Description
 This is a Bash script created to calculate the monthly CPU cost for a specified lab group on the Stanford's [SCG](https://login.scg.stanford.edu/) HPC cluster. It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. The script includes logging functionality to prevent repeated email notifications for users who have already been notified within the same month.
@@ -49,7 +50,7 @@ This command will calculate the monthly CPU cost for lab group in March 2024. If
 ## Automating the process with Cron Jobs
 To automate the execution of the script periodically, you can utilize cron jobs. Cron is a time-based job scheduler in Unix-like operating systems, which allows you to schedule tasks to run at fixed intervals. Here's how you can set up a cron job to run the script periodically:
 
-Open your terminal or SSH into the server where you want to schedule the cron job.
+SSH into SCG server where you need to schedule the cron job.
 
 Edit the crontab file by running the command:
 
