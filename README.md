@@ -50,7 +50,7 @@ This command will calculate the monthly CPU cost for lab group in March 2024. If
 ## Automating the process with Cron Jobs
 To automate the execution of the script periodically, you can utilize cron jobs. Cron is a time-based job scheduler in Unix-like operating systems, which allows you to schedule tasks to run at fixed intervals. Here's how you can set up a cron job to run the script periodically:
 
-SSH into SCG server where you need to schedule the cron job.
+SSH into SCG cluster where you need to schedule the cron job.
 
 Edit the crontab file by running the command:
 
@@ -68,7 +68,7 @@ This line specifies that the script should run every day at midnight (00:00).
 Replace /path/to/your/script.sh with the actual path to your script.
 Replace <pi_sunset>, <monthly_limit>, and can also add <cc_email> with the desired values for the script's options.
 
-Save the crontab file and exit the edit or.
+Save the crontab file and exit the editor.
 
 Now, the cron job is scheduled to execute the script automatically at the specified time intervals. You can adjust the cron schedule according to your requirements by modifying the timing values (e.g., minute, hour) in the cron job line.
 

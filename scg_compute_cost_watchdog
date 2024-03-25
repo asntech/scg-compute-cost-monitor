@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# This scripts calculate the monthly CPU cost for a specified lab group on the Stanford Computing Cluster (SCG).
+# This script calculates the monthly CPU cost for a specified lab group on the Stanford's SCG cluster.
 # It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. 
+
+# Author: Aziz Khan <azizk@stanford.edu>
 
 # Function to display usage information
 display_usage() {
@@ -61,15 +63,6 @@ if [ -z "$pi_sunset" ]; then
     exit 1
 fi
 
-# Define log directory
-LOG_DIR="/home/${USER}"
-# Create log file name based on month and year
-log_file="$LOG_DIR/SCG_compute_cost_alerted_log_${year}_${month}.txt"
-touch $log_file
-
-# Default values
-MONTHLY_LIMIT=800
-
 # If month and year are not provided, use default
 today_date=$(date +"%Y-%m-%d")
 current_year=$(date +"%Y")
@@ -83,6 +76,15 @@ fi
 if [ -z "$monthly_limit" ]; then
     monthly_limit="$MONTHLY_LIMIT"
 fi
+
+# Define log directory
+LOG_DIR="/home/${USER}"
+# Create log file name based on month and year
+log_file="$LOG_DIR/SCG_compute_cost_alerted_log_${year}_${month}.txt"
+touch $log_file
+
+# Default values
+MONTHLY_LIMIT=800
 
 # Function to check if the user has already been notified this month
 user_already_notified() {
