@@ -1,0 +1,139 @@
+#!/bin/bash
+
+# This scripts calculate the monthly CPU cost for a specified lab group on the Stanford Computing Cluster (SCG).
+# It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. 
+
+# Function to display usage information
+display_usage() {
+    echo "Usage: $0 [-m <month>] [-y <year>] -p <pi_sunset> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]"
+    echo "Options:"
+    echo "  -m <month>: Specify the month (default: current month)"
+    echo "  -y <year>: Specify the year (default: current year)"
+    echo "  -a <pi_sunset>: Specify the PI's sunset ID (required)"
+    echo "  -l <monthly_limit>: Specify the monthly cost limit (default: 800)"
+    echo "  -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)"
+    echo "  -c <cc_email>: Specify email addresses to cc the alerts (optional)"
+    echo "  -h: Display this help message"
+}
+
+# Parse the CLI arguments
+while getopts ":m:y:a:l:e:c:h" opt; do
+    case $opt in
+        m)
+            month=$OPTARG
+            ;;
+        y)
+            year=$OPTARG
+            ;;
+        a)
+            pi_sunset=$OPTARG
+            ;;
+        l)
+            monthly_limit=$OPTARG
+            ;;
+        e)
+            send_email=$OPTARG
+            ;;
+        c)
+            cc_email=$OPTARG
+            ;;
+	h)
+            display_usage
+	    exit 1
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            display_usage
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            display_usage
+            exit 1
+            ;;
+    esac
+done
+
+# Check if pi_sunset argument is provided
+if [ -z "$pi_sunset" ]; then
+    echo "Option -a <pi_sunset> is required."
+    display_usage
+    exit 1
+fi
+
+# Define log directory
+LOG_DIR="/home/${USER}"
+# Create log file name based on month and year
+log_file="$LOG_DIR/SCG_compute_cost_alerted_log_${year}_${month}.txt"
+touch $log_file
+
+# Default values
+MONTHLY_LIMIT=800
+
+# If month and year are not provided, use default
+today_date=$(date +"%Y-%m-%d")
+current_year=$(date +"%Y")
+current_month=$(date +"%m")
+if [ -z "$month" ]; then
+    month="$current_month"
+fi
+if [ -z "$year" ]; then
+    year="$current_year"
+fi
+if [ -z "$monthly_limit" ]; then
+    monthly_limit="$MONTHLY_LIMIT"
+fi
+
+# Function to check if the user has already been notified this month
+user_already_notified() {
+    local user_email="$1"
+    if grep -q "^$user_email$" "$log_file"; then
+        return 0  # User has already been notified
+    else
+        return 1  # User has not been notified yet
+    fi
+}
+
+# Function to send email alerts
+send_email_alert() {
+    #cc_recipients
+    # Add cc recipient's email address
+    if [ -z "$cc_email" ]; then
+        cc_recipients=$recipient
+    fi
+
+    subject="Alert: SCG monthly compute cost"
+    message="This is an automated alert message.
+Your SCG cluster compute costs are exceeding the monthly limit of $monthly_limit USD.
+
+Usage for this month:
+CPU hours: $hours
+Charges (USD): $cost
+
+Please check your jobs and ensure that the requested CPUs are fully utilized.
+
+Thank you!
+"
+    echo "$message" | mail -s "$subject" -c "$cc_recipients" "$recipient"
+}
+
+# Get all users in the group and compute the cost of the current month
+echo -e "user_name\tcpu_hours\tcharges_in_usd\tmonth\tyear"
+for user in $(getent group "scg_lab_$pi_sunset" | awk -F: '{print $4}' | tr ',' '\n'); do
+    get_compute_charges -a "$pi_sunset" -u "$user" -m "$month" -y "$year" -p | \
+    while read hours cost; do
+        echo -e "$user\t$hours\t$cost\t$month\t$year"
+
+         # Check the cost limit and if user has already been notified this month
+	 if (( $(echo "$cost > $monthly_limit" | bc -l) )); then
+	    recipient="$user@stanford.edu"
+
+	    if ! user_already_notified "$recipient"; then
+                if [ "$send_email" = "true" ]; then
+                    send_email_alert
+                    echo "$recipient" >> "$log_file"
+		fi
+            fi
+        fi
+    done
+done
