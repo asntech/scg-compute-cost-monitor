@@ -22,12 +22,12 @@ chmod +x scg_compute_cost_monitor
 ```
 ./scg_compute_cost_monitor -h
 
-Usage: ./scg_compute_cost_monitor [-m <month>] [-y <year>] -p <pi_sunset> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
+Usage: ./scg_compute_cost_monitor [-m <month>] [-y <year>] -p <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]
 
 Options:
   -m <month>: Specify the month (default: current month)
   -y <year>: Specify the year (default: current year)
-  -a <pi_sunset>: Specify the PI sunset ID (required)
+  -a <pi_sunet>: Specify the PI sunset ID (required)
   -l <monthly_limit>: Specify the monthly cost limit (default: 800)
   -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)
   -c <cc_email>: Specify email addresses to cc the alerts (optional)
@@ -61,12 +61,12 @@ crontab -e
 Add a new line to the crontab file with the following format:
 
 ```bash
-0 0 * * * /path/to/scg_compute_cost_monitor -a <pi_sunset> -l <monthly_limit> -e true -c <cc_email>
+0 0 * * * /path/to/scg_compute_cost_monitor -a <pi_sunet> -l <monthly_limit> -e true -c <cc_email>
 ```
 
 This line specifies that the script should run every day at midnight (00:00).
 Replace /path/to/your/script.sh with the actual path to your script.
-Replace <pi_sunset>, <monthly_limit>, and can also add <cc_email> with the desired values for the script's options.
+Replace <pi_sunet>, <monthly_limit>, and can also add <cc_email> with the desired values for the script's options.
 
 Save the crontab file and exit the editor.
 
