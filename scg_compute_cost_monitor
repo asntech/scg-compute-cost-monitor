@@ -5,9 +5,12 @@
 
 # Author: Aziz Khan <azizk@stanford.edu>
 
+# Default values
+MONTHLY_LIMIT=800
+
 # Function to display usage information
 display_usage() {
-    echo "Usage: $0 [-m <month>] [-y <year>] -p <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]"
+    echo "Usage: $0 [-m <month>] [-y <year>] -a <pi_sunet> [-l <monthly_limit>] [-e <send_email>] [-c <cc_email>]"
     echo "Options:"
     echo "  -m <month>: Specify the month (default: current month)"
     echo "  -y <year>: Specify the year (default: current year)"
@@ -67,6 +70,7 @@ fi
 today_date=$(date +"%Y-%m-%d")
 current_year=$(date +"%Y")
 current_month=$(date +"%m")
+
 if [ -z "$month" ]; then
     month="$current_month"
 fi
@@ -82,9 +86,6 @@ LOG_DIR="/home/${USER}"
 # Create log file name based on month and year
 log_file="$LOG_DIR/scg_compute_cost_monitor_log_${year}_${month}.txt"
 touch $log_file
-
-# Default values
-MONTHLY_LIMIT=800
 
 # Function to check if the user has already been notified this month
 user_already_notified() {
