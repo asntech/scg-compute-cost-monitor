@@ -4,12 +4,9 @@
 ## Description
 The bash script `scg_compute_cost_monitor` calculates the monthly CPU cost for a specified lab group on the Stanford's [SCG](https://login.scg.stanford.edu/) HPC cluster. It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. The script includes logging functionality to prevent repeated email notifications for users who have already been notified within the same month.
 
-## Prerequisites
-Before using the script, ensure the following :
-- You've access to the [SCG cluster](https://login.scg.stanford.edu/)
-- And you can run `get_compute_charges` command-line tool
-
 ## Usage
+Before using the script, ensure you've access to the [SCG cluster](https://login.scg.stanford.edu/) and you are on cluster.
+
 **Get the script**: Obtain the `scg_compute_cost_monitor` script and ensure it is executable.
 
 ```bash
