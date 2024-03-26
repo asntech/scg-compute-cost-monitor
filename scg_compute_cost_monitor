@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # This script calculates the monthly CPU cost for a specified lab group on the Stanford's SCG cluster.
 # It allows users to monitor their compute costs and optionally receive email alerts if the cost exceeds a specified monthly limit. 
@@ -123,7 +123,7 @@ Thank you!
 # Get all users in the group and compute the cost of the current month
 echo -e "user_name\tcpu_hours\tcharges_in_usd\tmonth\tyear"
 for user in $(getent group "scg_lab_$pi_sunet" | awk -F: '{print $4}' | tr ',' '\n'); do
-    get_compute_charges -a "$pi_sunet" -u "$user" -m "$month" -y "$year" -p | \
+    /scg/slurm/utils/get_compute_charges -a "$pi_sunet" -u "$user" -m "$month" -y "$year" -p | \
     while read hours cost; do
         echo -e "$user\t$hours\t$cost\t$month\t$year"
 
