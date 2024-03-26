@@ -28,7 +28,7 @@ def get_scg_cost_report(account, year, bin, plot,outdir):
 
     # Initialize DataFrame
     data = pd.DataFrame(columns=['User', 'Hours', 'Cost', 'Month', 'Year'])  
-  
+    
     # Create the output dir if it doesn't exist
     outdir=f'{outdir}/{year}'
     if not os.path.exists(outdir):
