@@ -38,11 +38,17 @@ The script will display the CPU hours and charges for each user in the specified
 
 ## Example
 
+Get CPU usage/cost report for each user associated PI account. This command will calculate the monthly CPU cost for lab group in March 2024. You can skip `-y` and `-m` to get the report for the current month. 
+
 ```
-./scg_compute_cost_monitor -a PI_SUNetID -m 03 -y 2024 -l 1000 -e true -c PI_SUNetID@stanford.edu
+./scg_compute_cost_monitor -a PI_SUNetID -m 03 -y 2024
 ```
 
-This command will calculate the monthly CPU cost for lab group in March 2024. If the cost exceeds 1000 USD, email alerts will be sent to your `SUNet@stanford.edu` and cc'd to `PI_SUNetID@stanford.edu`. The script will prevent repeated email notifications for users who have already been notified within the same month. To get the current month, you don not need to set `-m` and `-y` arguments.
+To get the report but also send an alert email to those users with monthly compute cost limit is above $1000 in the current month. 
+```
+./scg_compute_cost_monitor -a PI_SUNetID -l 1000 -e true -c <cc_email>@stanford.edu
+```
+If the cost exceeds 1000 USD, email alerts will be sent to your `SUNet@stanford.edu` and can optionally cc to you PI or lab admin `<cc_email>@stanford.edu`. The script will prevent repeated email notifications for users who have already been notified within the same month.
 
 ## Automating the process with Cron Jobs
 To automate the execution of the script periodically, you can utilize cron jobs. Cron is a time-based job scheduler in Unix-like operating systems, which allows you to schedule tasks to run at fixed intervals. Here's how you can set up a cron job to run the script periodically:
