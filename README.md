@@ -28,13 +28,14 @@ Options:
   -l <monthly_limit>: Specify the monthly cost limit (default: 800)
   -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)
   -c <cc_email>: Specify email addresses to cc the alerts (optional)
+  -d <log_dir>: Path to store log files for email alerts (optional)"
   -h: Display this help message
 
   ```
 
 The script will display the CPU hours and charges for each user in the specified lab group for the specified month and year.
 
-*Email alerts*: If the cost exceeds the specified monthly limit and send_email is set to true [`-e true`], email alerts will be sent to the respective users. Optionally, you can specify email addresses to cc the alerts using the `-c <cc_email>` option. The script logs the users who have been notified in a log file to prevent repeated notifications within the same month. You can change the log directory path by setting `LOG_DIR` variable in the script.
+*Email alerts*: If the cost exceeds the specified monthly limit and send_email is set to true [`-e true`], email alerts will be sent to the respective users. Optionally, you can specify email addresses to cc the alerts using the `-c <cc_email>` option. The script logs the users who have been notified in a log file to prevent repeated notifications within the same month. You can change the log directory path by setting `-d` argument.
 
 ## Example
 
