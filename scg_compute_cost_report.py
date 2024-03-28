@@ -26,17 +26,18 @@ def get_scg_cost_report(ctx, account, year, bin, plot,outdir):
     if account is None or outdir is None:
         click.echo(ctx.get_help())
         ctx.exit()
-        
+
     # check if executable is found
     which_result = subprocess.run(['which', bin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if which_result.returncode != 0:
         raise FileNotFoundError("Error: 'scg_compute_cost_monitor' not found.")
 
     # Initialize DataFrame
-    data = pd.DataFrame(columns=['User', 'Hours', 'Cost', 'Month', 'Year'])  
+    data = pd.DataFrame(columns=['User', 'Hours', 'Cost', 'Month', 'Year'])
     
     # Create the output dir if it doesn't exist
-    outdir=f'{outdir}/{year}'
+    outdir=f"{outdir}/{year}"
+    
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
