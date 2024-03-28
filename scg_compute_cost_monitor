@@ -18,11 +18,12 @@ display_usage() {
     echo "  -l <monthly_limit>: Specify the monthly cost limit (default: 800)"
     echo "  -e <send_email>: Specify whether to send email alerts for exceeding the limit (set to: true)"
     echo "  -c <cc_email>: Specify email addresses to cc the alerts (optional)"
+    echo "  -d <log_dir>: Path to store log files for email alerts (optional)"
     echo "  -h: Display this help message"
 }
 
 # Parse the CLI arguments
-while getopts ":m:y:a:l:e:c:h" opt; do
+while getopts ":m:y:a:l:e:c:d:h" opt; do
     case $opt in
         m)
             month=$OPTARG
@@ -42,7 +43,10 @@ while getopts ":m:y:a:l:e:c:h" opt; do
         c)
             cc_email=$OPTARG
             ;;
-	h)
+        d)
+            log_dir=$OPTARG
+            ;;
+	    h)
             display_usage
 	    exit 1
             ;;
@@ -82,10 +86,17 @@ if [ -z "$monthly_limit" ]; then
 fi
 
 # Define log directory
-LOG_DIR="/home/${USER}"
+if [ -z "$log_dir" ]; then
+    LOG_DIR="/home/${USER}"
+else
+    LOG_DIR=$log_dir
+fi
 # Create log file name based on month and year
 log_file="$LOG_DIR/scg_compute_cost_monitor_log_${year}_${month}.txt"
-touch $log_file
+
+if [ "$send_email" = "true" ]; then
+    touch $log_file
+fi
 
 # Function to check if the user has already been notified this month
 user_already_notified() {
@@ -99,10 +110,11 @@ user_already_notified() {
 
 # Function to send email alerts
 send_email_alert() {
-    #cc_recipients
-    # Add cc recipient's email address
+     # Add cc recipient's email address
     if [ -z "$cc_email" ]; then
         cc_recipients=$recipient
+    else
+        cc_recipients=$cc_email
     fi
 
     subject="Alert: SCG monthly compute cost"
@@ -130,7 +142,7 @@ for user in $(getent group "scg_lab_$pi_sunet" | awk -F: '{print $4}' | tr ',' '
          # Check the cost limit and if user has already been notified this month
 	 if (( $(echo "$cost > $monthly_limit" | bc -l) )); then
 	    recipient="$user@stanford.edu"
-
+        # if the use was already notified for the current, skip email
 	    if ! user_already_notified "$recipient"; then
                 if [ "$send_email" = "true" ]; then
                     send_email_alert
