@@ -54,8 +54,27 @@ If the cost exceeds 1000 USD, email alerts will be sent to your `SUNet@stanford.
 To automate the execution of the script periodically, you can utilize cron jobs. Cron is a time-based job scheduler in Unix-like operating systems, which allows you to schedule tasks to run at fixed intervals. Here's how you can set up a cron job to run the script periodically:
 
 SSH into SCG cluster where you need to schedule the cron job.
+First create a bash script to source `.bashrc` and run the `scg_compute_cost_monitor` script
+```bash
+vim run_scg_compute_cost_monitor.sh
+```
 
-Edit the crontab file by running the command:
+Add these lines to the script and update the path and arguments
+```
+#!/bin/bash
+source ~/.bashrc
+
+# run the compute monitor script
+/path/to/scg-compute-cost-monitor/scg_compute_cost_monitor -a <pi_sunet> -l <monthly_limit> -e true -c <cc_email>
+```
+Replace <pi_sunet>, <monthly_limit>, and can also add <cc_email> with the desired values for the script's options.
+
+Make the script execuitable:
+```
+chmod +x /path/to/run_scg_compute_cost_monitor.sh
+```
+
+Now edit the crontab file by running the command:
 
 ```bash
 crontab -e
@@ -64,12 +83,11 @@ crontab -e
 Add a new line to the crontab file with the following format:
 
 ```bash
-0 0 * * * /path/to/scg_compute_cost_monitor -a <pi_sunet> -l <monthly_limit> -e true -c <cc_email>
+30 09 * * * /path/to/run_scg_compute_cost_monitor.sh
 ```
 
-This line specifies that the script should run every day at midnight (00:00).
-Replace /path/to/your/script.sh with the actual path to your script.
-Replace <pi_sunet>, <monthly_limit>, and can also add <cc_email> with the desired values for the script's options.
+This line specifies that the script should run every day at 09:30am in the morning.
+Replace /path/to/run_scg_compute_cost_monitor.sh with the actual path to your script.
 
 Save the crontab file and exit the editor.
 

@@ -9,18 +9,24 @@ import click
 import matplotlib.pyplot as plt
 import pandas as pd
 import subprocess
+import datetime
 
 @click.command()
 @click.option('-a', '--account', required=True, help='PI SUNet ID')
-@click.option('-y', '--year', required=True, type=int, help='Year')
-@click.option('-p', '--plot', is_flag=True, default=False, help='Plot the usage stats')
+@click.option('-y', '--year', default=datetime.date.today().year, type=int, help='Year (default: current year)')
 @click.option('-b', '--bin', required=True, show_default=True, default="scg_compute_cost_monitor", type=click.Path(), help='Binary file path')
+@click.option('-p', '--plot', is_flag=True, default=False, help='Plot the usage stats')
 @click.option('-o', '--outdir', required=True, type=click.Path(), help='Output path')
-def get_scg_cost_report(account, year, bin, plot,outdir):
+@click.pass_context
+def get_scg_cost_report(ctx, account, year, bin, plot,outdir):
     '''
     Get yearly SCG compute cost report for your lab
     '''
     
+    if account is None or outdir is None:
+        click.echo(ctx.get_help())
+        ctx.exit()
+        
     # check if executable is found
     which_result = subprocess.run(['which', bin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if which_result.returncode != 0:
@@ -61,7 +67,7 @@ def get_scg_cost_report(account, year, bin, plot,outdir):
         plt.ylabel('Total Cost (USD)')
         plt.xticks(range(1, 13))
         plt.tight_layout()
-        plt.savefig(f'{outdir}/yearly_usage_{account}_{year}.png')
+        plt.savefig(f'{outdir}/scg_yearly_usage_{account}_{year}.png')
         plt.close()
 
         # Generate individual user usage plots for those 
@@ -76,7 +82,7 @@ def get_scg_cost_report(account, year, bin, plot,outdir):
             plt.ylabel('Cost (USD)')
             plt.xticks(range(1, 13))
             plt.tight_layout()
-            plt.savefig(f'{outdir}/user_usage_{user}_{year}.png')
+            plt.savefig(f'{outdir}/scg_user_usage_{user}_{year}.png')
             plt.close()
 
     click.echo(f'Compute usage report for the year {year} generated successfully!')
