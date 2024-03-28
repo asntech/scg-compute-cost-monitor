@@ -128,6 +128,7 @@ Charges (USD): $cost
 Please check your jobs and ensure that the requested CPUs are fully utilized.
 
 Thank you!
+P.S. This is one-time alert by github.com/asntech/scg-compute-cost-monitor
 "
     echo "$message" | mail -s "$subject" -c "$cc_recipients" "$recipient"
 }
