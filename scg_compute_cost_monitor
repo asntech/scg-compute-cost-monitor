@@ -144,12 +144,12 @@ for user in $(getent group "scg_lab_$pi_sunet" | awk -F: '{print $4}' | tr ',' '
 	 if (( $(echo "$cost > $monthly_limit" | bc -l) )); then
 	    recipient="$user@stanford.edu"
         # if the use was already notified for the current, skip email
-	    if ! user_already_notified "$recipient"; then
-                if [ "$send_email" = "true" ]; then
-                    send_email_alert
-                    echo "$recipient" >> "$log_file"
-		fi
-            fi
+	    if [ "$send_email" = "true" ]; then
+            if ! user_already_notified "$recipient"; then    
+                send_email_alert
+                echo "$recipient" >> "$log_file"
+		    fi
         fi
+     fi
     done
 done
