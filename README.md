@@ -97,10 +97,9 @@ Now, the cron job is scheduled to execute the script automatically at the specif
 **Note:** Make sure that only one person schedules the cron job in your group to avoid multiple alerts.
 
 
-## Get a month report
+## Get a yearly usage report
 
-To get yearly SCG compute cost report for your lab you can use `scg_compute_cost_report.py`. This Python script generates a yearly SCG compute cost report and also provides an option to plot the per-month cost and user usage plots.
-
+To get yearly (per-month) SCG compute cost report for your lab you can use `scg_compute_cost_report.py`. This Python script generates a yearly SCG compute cost report and also provides an option to plot the per-month cost and user usage plots.
 
 Firt you need to load the `Python v3.11.1` or install python packages using `pip install -r requirements.txt`
 
